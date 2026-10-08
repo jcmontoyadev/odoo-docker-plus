@@ -134,6 +134,8 @@ Para usarlo:
 
 Esta plantilla es para desarrollar y probar. Si quieres desplegar Odoo para tu negocio con proxy, SSL y copias de seguridad, o no tienes claro si te conviene Enterprise o Community, Odoo.sh o tu propio servidor, agenda una llamada gratis de 5 minutos: [agenda](https://odooerpcloud.com/appointment)
 
+Cómo desplegamos Odoo en producción: [video en YouTube](https://youtu.be/k_EFDQkpAi8)
+
 ## Licencia
 
 MIT. Odoo es de Odoo S.A.; esta plantilla solo parte de su imagen oficial de Docker.
