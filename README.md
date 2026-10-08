@@ -137,6 +137,7 @@ Esta plantilla es para desarrollar y probar. Si quieres desplegar Odoo para tu n
 Videos relacionados:
 
 - **Odoo en producción:** cómo lo desplegamos, [video en YouTube](https://youtu.be/k_EFDQkpAi8)
+- **Novedades de Odoo 20:** [video en YouTube](https://youtu.be/jeq7t1qoBRw)
 - **Odoo 20 para desarrollo sin Docker** (Ubuntu 26.04, con Paper Muncher): [video en YouTube](https://youtu.be/_qqtEde-_5M)
 
 ## Licencia
