@@ -1,0 +1,9 @@
+# Your modules stay yours: they are not pushed to the template repo.
+custom_addons/*
+!custom_addons/.gitkeep
+
+.DS_Store
+.idea
+.venv
+venv
+.env

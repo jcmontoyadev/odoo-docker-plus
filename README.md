@@ -1,0 +1,105 @@
+# odoo-docker-plus
+
+> **EN:** Odoo 20 on Docker, built on the official image, with four fixes: it opens in the browser (the official `odoo:20` only listens on 127.0.0.1), it runs the latest nightly build instead of a weeks-old one, it ships Paper Muncher (Odoo 20's new PDF engine), and you add your own Python or system dependencies in one line. `git clone`, `docker compose up -d --build`, done.
+
+Odoo 20 en Docker a partir de la imagen oficial, con lo que a la oficial le falta. Para desarrollar y probar; también te sirve de base para algo más serio.
+
+## Qué mejora sobre la imagen oficial
+
+| | `odoo:20` oficial | odoo-docker-plus |
+| --- | --- | --- |
+| Abrir `localhost:8069` | ❌ No responde: Odoo 20 solo escucha en `127.0.0.1` | ✅ Corregido en `config/odoo.conf` |
+| Compilación de Odoo | La de la imagen (se publica con días o semanas de retraso) | La última nightly, o la fecha que elijas |
+| Paper Muncher (nuevo motor de PDF de Odoo 20) | ❌ No viene | ✅ Instalado (servidores amd64) |
+| Dependencias extra | Te toca escribir tu propio Dockerfile | Una línea en `requirements.txt` o en `APT_PACKAGES` |
+| `markdown2` | ❌ Falta (Odoo lo avisa en el log) | ✅ |
+| `phonenumbers` | 8.12 (la de Ubuntu, prefijos viejos) | 9.0 |
+
+## Arranque en 3 pasos
+
+Necesitas Docker con Docker Compose.
+
+```bash
+git clone https://github.com/jcmontoyadev/odoo-docker-plus.git
+cd odoo-docker-plus
+docker compose up -d --build
+```
+
+Abre http://localhost:8069 y crea tu base de datos.
+
+Ver el log:
+
+```bash
+docker compose logs -f odoo
+```
+
+## Qué hay en el repo
+
+| Fichero | Para qué |
+| --- | --- |
+| `compose.yaml` | Odoo + PostgreSQL 17. Aquí eliges la compilación y los paquetes del sistema |
+| `Dockerfile` | Parte de `odoo:20` y añade compilación al día, Paper Muncher y tus dependencias |
+| `requirements.txt` | Tus librerías de Python, una por línea |
+| `config/odoo.conf` | La configuración de Odoo (se monta en `/etc/odoo`) |
+| `custom_addons/` | Tus módulos |
+
+## Odoo siempre al día
+
+La imagen oficial no se publica cada día: cuando la descargas puede llevar semanas de correcciones atrasadas. En `compose.yaml`:
+
+```yaml
+ODOO_RELEASE: "latest"     # la última nightly publicada
+ODOO_RELEASE: "20261008"   # una compilación concreta
+ODOO_RELEASE: ""           # la que trae la imagen oficial
+```
+
+Para actualizar a la última:
+
+```bash
+docker compose build --pull --no-cache && docker compose up -d
+```
+
+La fecha de la compilación la ves en Ajustes, abajo del todo.
+
+## Añadir dependencias
+
+**Python:** una línea en `requirements.txt`, con versión fija:
+
+```text
+openpyxl==3.1.5
+```
+
+**Sistema (apt):** en `compose.yaml`, separados por espacios:
+
+```yaml
+APT_PACKAGES: "poppler-utils libzbar0"
+```
+
+Después: `docker compose up -d --build`.
+
+## Paper Muncher
+
+Es el nuevo motor de PDF de Odoo 20. La plantilla lo instala en `/opt/paper-muncher/bin/`, donde Odoo lo busca.
+
+Para usarlo:
+
+1. Activa el modo desarrollador y, en Aplicaciones, quita el filtro "Aplicaciones" del buscador: el módulo **Report Engine: Paper Muncher** (`base_report_paper_muncher`) es técnico y no sale en la lista normal. Instálalo.
+2. En el informe que quieras, cambia el tipo a **PDF (Paper Muncher)**.
+
+> Paper Muncher solo publica paquetes para **amd64**. En un Mac con chip Apple (arm64) se omite y Odoo imprime con wkhtmltopdf como siempre. En tu servidor amd64, sí se instala.
+
+## Buenas prácticas
+
+- **PostgreSQL:** Odoo 20 necesita la 16 o superior. Si pasas a `postgres:18`, cambia el volumen a `/var/lib/postgresql` (la 18 movió la ruta de los datos).
+- **Contraseña maestra:** ponla en `config/odoo.conf` (`admin_passwd`) antes de exponer Odoo fuera de tu equipo.
+- **Borrar todo, datos incluidos:** `docker compose down -v`. Sin `-v` conservas las bases de datos.
+
+## ¿Odoo en producción?
+
+Esta plantilla es para desarrollar y probar. Si quieres desplegar Odoo para tu negocio con proxy, SSL y copias de seguridad, o no tienes claro si te conviene Enterprise o Community, Odoo.sh o tu propio servidor, agenda una llamada gratis de 5 minutos: [agenda](https://odooerpcloud.com/appointment)
+
+Tutorial en video:
+
+## Licencia
+
+MIT. Odoo es de Odoo S.A.; esta plantilla solo parte de su imagen oficial de Docker.

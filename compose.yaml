@@ -1,0 +1,38 @@
+services:
+  odoo:
+    build:
+      context: .
+      args:
+        # Odoo build: "" = the one in the official image, a date (20261008) or "latest".
+        ODOO_RELEASE: "latest"
+        # System packages, space separated. Example: "libzbar0 poppler-utils"
+        APT_PACKAGES: ""
+    image: odoo20-custom
+    container_name: odoo20docker
+    depends_on:
+      - db
+    ports:
+      - "8069:8069"
+    volumes:
+      - ./custom_addons:/mnt/extra-addons
+      - ./config:/etc/odoo
+      - odoo_data:/var/lib/odoo
+    environment:
+      HOST: db
+      USER: odoo
+      PASSWORD: odoo
+
+  db:
+    # Odoo 20 requires PostgreSQL 16 or later.
+    image: postgres:17
+    container_name: pg17
+    environment:
+      POSTGRES_USER: odoo
+      POSTGRES_PASSWORD: odoo
+      POSTGRES_DB: postgres
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+volumes:
+  odoo_data:
+  db_data:

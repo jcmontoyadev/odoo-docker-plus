@@ -1,0 +1,6 @@
+# Extra Python libraries for your modules: one per line, pinned.
+# If the official image already ships one (qrcode, xlrd...), list it here only to upgrade it.
+# Odoo 20 warns that markdown2 is missing (without it, markdown is not rendered).
+markdown2==2.5.5
+# phonenumbers ships with the official image but outdated (8.12.57, from Ubuntu): this one has current prefixes.
+phonenumbers==9.0.41
