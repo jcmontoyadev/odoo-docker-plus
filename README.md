@@ -1,33 +1,37 @@
 # odoo-docker-plus
 
-> **EN:** Odoo 20 on Docker, built on the official image, with four fixes: it opens in the browser (the official `odoo:20` only listens on 127.0.0.1), it runs the latest nightly build instead of a weeks-old one, it ships Paper Muncher (Odoo 20's new PDF engine), and you add your own Python or system dependencies in one line. `git clone`, `docker compose up -d --build`, done.
+> 🇪🇸 [¿Quieres ver la guía en español?](README_es.md)
 
-Odoo 20 en Docker a partir de la imagen oficial, con lo que a la oficial le falta. Para desarrollar y probar; también te sirve de base para algo más serio.
+> **Coming from the old Odoo 19 Docker video?** Use this project instead of the PDF guide from that video: it's more up to date and fixes the errors that guide had.
 
-## Qué mejora sobre la imagen oficial
+Odoo 20 on Docker, built on the official image, with four fixes: it opens in the browser (the official `odoo:20` only listens on 127.0.0.1), it runs the latest nightly build instead of a weeks-old one, it ships Paper Muncher (Odoo 20's new PDF engine), and you add your own Python or system dependencies in one line. `git clone`, `docker compose up -d --build`, done.
 
-| | `odoo:20` oficial | odoo-docker-plus |
+Made for development and testing; also a solid base for something more serious.
+
+## What it improves over the official image
+
+| | Official `odoo:20` | odoo-docker-plus |
 | --- | --- | --- |
-| Abrir `localhost:8069` | ❌ No responde: Odoo 20 solo escucha en `127.0.0.1` | ✅ Corregido en `config/odoo.conf` |
-| Compilación de Odoo | La de la imagen (se publica con días o semanas de retraso) | La última nightly, o la fecha que elijas |
-| Paper Muncher (nuevo motor de PDF de Odoo 20) | ❌ No viene | ✅ Instalado (servidores amd64) |
-| Dependencias extra | Te toca escribir tu propio Dockerfile | Una línea en `requirements.txt` o en `APT_PACKAGES` |
-| `markdown2` | ❌ Falta (Odoo lo avisa en el log) | ✅ |
-| `phonenumbers` | 8.12 (la de Ubuntu, prefijos viejos) | 9.0 |
+| Opening `localhost:8069` | ❌ No response: Odoo 20 only listens on `127.0.0.1` | ✅ Fixed in `config/odoo.conf` |
+| Odoo build | The one in the image (published days or weeks late) | The latest nightly, or the date you choose |
+| Paper Muncher (Odoo 20's new PDF engine) | ❌ Not included | ✅ Installed (amd64 servers) |
+| Extra dependencies | You write your own Dockerfile | One line in `requirements.txt` or `APT_PACKAGES` |
+| `markdown2` | ❌ Missing (Odoo warns about it in the log) | ✅ |
+| `phonenumbers` | 8.12 (Ubuntu's, outdated prefixes) | 9.0 |
 
-## Requisitos
+## Requirements
 
-Necesitas **Docker** con **Docker Compose**, y **Git**. Docker Desktop y OrbStack ya traen Compose; en Linux se instala junto a Docker Engine siguiendo su guía oficial.
+You need **Docker** with **Docker Compose**, and **Git**. Docker Desktop and OrbStack already include Compose; on Linux it installs alongside Docker Engine following its official guide.
 
-| Sistema | Docker |
+| System | Docker |
 | --- | --- |
-| **Windows** | [Docker Desktop](https://www.docker.com/products/docker-desktop/). Activa WSL 2 para que vaya fluido: [cómo instalar WSL](https://learn.microsoft.com/windows/wsl/install) |
-| **macOS** | [Docker Desktop](https://www.docker.com/products/docker-desktop/) o [OrbStack](https://orbstack.dev/) (más ligero y rápido en Mac) |
-| **Linux** | [Docker Engine](https://docs.docker.com/engine/install/) con el plugin de Compose. Es lo mejor en Linux: no necesitas Docker Desktop |
+| **Windows** | [Docker Desktop](https://www.docker.com/products/docker-desktop/). Enable WSL 2 for good performance: [how to install WSL](https://learn.microsoft.com/windows/wsl/install) |
+| **macOS** | [Docker Desktop](https://www.docker.com/products/docker-desktop/) or [OrbStack](https://orbstack.dev/) (lighter and faster on Mac) |
+| **Linux** | [Docker Engine](https://docs.docker.com/engine/install/) with the Compose plugin. Best option on Linux: you don't need Docker Desktop |
 
-Git: [descárgalo aquí](https://git-scm.com/downloads) si no lo tienes (en macOS y Linux suele venir instalado).
+Git: [download it here](https://git-scm.com/downloads) if you don't have it (usually preinstalled on macOS and Linux).
 
-Comprueba que todo está listo:
+Check that everything is ready:
 
 ```bash
 docker -v
@@ -35,7 +39,7 @@ docker compose version
 git --version
 ```
 
-## Arranque en 3 pasos
+## Quick start
 
 ```bash
 git clone https://github.com/jcmontoyadev/odoo-docker-plus.git
@@ -43,59 +47,59 @@ cd odoo-docker-plus
 docker compose up -d --build
 ```
 
-Abre http://localhost:8069 y crea tu base de datos.
+Open http://localhost:8069 and create your database.
 
-## Qué hay en el repo
+## What's in the repo
 
-| Fichero | Para qué |
+| File | Purpose |
 | --- | --- |
-| `compose.yaml` | Odoo + PostgreSQL 17. Aquí eliges la compilación y los paquetes del sistema |
-| `Dockerfile` | Parte de `odoo:20` y añade compilación al día, Paper Muncher y tus dependencias |
-| `requirements.txt` | Tus librerías de Python, una por línea |
-| `config/odoo.conf` | La configuración de Odoo (se monta en `/etc/odoo`) |
-| `custom_addons/` | Tus módulos |
+| `compose.yaml` | Odoo + PostgreSQL 17. Choose the build and system packages here |
+| `Dockerfile` | Starts from `odoo:20` and adds the up-to-date build, Paper Muncher and your dependencies |
+| `requirements.txt` | Your Python libraries, one per line |
+| `config/odoo.conf` | Odoo configuration (mounted at `/etc/odoo`) |
+| `custom_addons/` | Your modules |
 
-## Odoo siempre al día
+## Always up-to-date Odoo
 
-La imagen oficial no se publica cada día: cuando la descargas puede llevar semanas de correcciones atrasadas. En `compose.yaml`:
+The official image isn't published every day: by the time you pull it, it can be weeks behind on fixes. In `compose.yaml`:
 
 ```yaml
-ODOO_RELEASE: "latest"     # la última nightly publicada
-ODOO_RELEASE: "20261008"   # una compilación concreta
-ODOO_RELEASE: ""           # la que trae la imagen oficial
+ODOO_RELEASE: "latest"     # the latest published nightly
+ODOO_RELEASE: "20261008"   # a specific build
+ODOO_RELEASE: ""           # the one shipped in the official image
 ```
 
-Para actualizar a la última:
+To update to the latest:
 
 ```bash
 docker compose build --pull --no-cache && docker compose up -d
 ```
 
-La fecha de la compilación la ves en Ajustes, abajo del todo.
+You can see the build date in Settings, at the very bottom.
 
-## Añadir dependencias
+## Adding dependencies
 
-**Python:** una línea en `requirements.txt`, con versión fija:
+**Python:** one line in `requirements.txt`, with a pinned version:
 
 ```text
 openpyxl==3.1.5
 ```
 
-**Sistema (apt):** en `compose.yaml`, separados por espacios:
+**System (apt):** in `compose.yaml`, space separated:
 
 ```yaml
 APT_PACKAGES: "poppler-utils libzbar0"
 ```
 
-Después: `docker compose up -d --build`.
+Then: `docker compose up -d --build`.
 
-## Tus módulos
+## Your modules
 
-1. Copia tu módulo dentro de `custom_addons/`.
-2. Activa el modo desarrollador (Ajustes, abajo del todo).
-3. Ve a Aplicaciones, pulsa **Actualizar lista de aplicaciones** y búscalo.
+1. Copy your module into `custom_addons/`.
+2. Enable developer mode (Settings, at the very bottom).
+3. Go to Apps, click **Update Apps List** and search for it.
 
-Si cambias el código Python de un módulo ya instalado, reinicia Odoo:
+If you change the Python code of an already installed module, restart Odoo:
 
 ```bash
 docker compose restart odoo
@@ -103,43 +107,65 @@ docker compose restart odoo
 
 ## Paper Muncher
 
-Es el nuevo motor de PDF de Odoo 20. La plantilla lo instala en `/opt/paper-muncher/bin/`, donde Odoo lo busca.
+Odoo 20's new PDF engine. The template installs it in `/opt/paper-muncher/bin/`, where Odoo looks for it.
 
-Para usarlo:
+To use it:
 
-1. Activa el modo desarrollador y, en Aplicaciones, quita el filtro "Aplicaciones" del buscador: el módulo **Report Engine: Paper Muncher** (`base_report_paper_muncher`) es técnico y no sale en la lista normal. Instálalo.
-2. En el informe que quieras, cambia el tipo a **PDF (Paper Muncher)**.
+1. Enable developer mode and, in Apps, remove the "Apps" filter from the search bar: the **Report Engine: Paper Muncher** module (`base_report_paper_muncher`) is technical and doesn't show up in the default list. Install it.
+2. On the report you want, change the type to **PDF (Paper Muncher)**.
 
-> Paper Muncher solo publica paquetes para **amd64**. En un Mac con chip Apple (arm64) se omite y Odoo imprime con wkhtmltopdf como siempre. En tu servidor amd64, sí se instala.
+> Paper Muncher only publishes packages for **amd64**. On an Apple Silicon Mac (arm64) it is skipped and Odoo prints with wkhtmltopdf as usual. On your amd64 server, it is installed.
 
-## Comandos útiles
+## Useful commands
 
-| Quiero… | Comando |
+| I want to… | Command |
 | --- | --- |
-| Ver el log de Odoo | `docker compose logs -f odoo` |
-| Ver qué contenedores están corriendo | `docker compose ps` |
-| Ver cuánta memoria y CPU consumen | `docker stats` |
-| Parar sin borrar nada | `docker compose stop` |
-| Volver a arrancar | `docker compose up -d` |
-| Borrar los contenedores (los datos se conservan) | `docker compose down` |
-| Borrar todo, **bases de datos incluidas** | `docker compose down -v` |
+| See the Odoo log | `docker compose logs -f odoo` |
+| See which containers are running | `docker compose ps` |
+| See memory and CPU usage | `docker stats` |
+| Stop without deleting anything | `docker compose stop` |
+| Start again | `docker compose up -d` |
+| Remove the containers (data is kept) | `docker compose down` |
+| Remove everything, **databases included** | `docker compose down -v` |
 
-## Buenas prácticas
+## Good practices
 
-- **PostgreSQL:** Odoo 20 necesita la 16 o superior. Si pasas a `postgres:18`, cambia el volumen a `/var/lib/postgresql` (la 18 movió la ruta de los datos).
-- **Contraseña maestra:** ponla en `config/odoo.conf` (`admin_passwd`) antes de exponer Odoo fuera de tu equipo.
-- **Dos proyectos a la vez:** clona el repo en otra carpeta y, en su `compose.yaml`, cambia los `container_name` y el puerto (por ejemplo `8070:8069`).
+- **PostgreSQL:** Odoo 20 needs 16 or later. If you move to `postgres:18`, change the volume to `/var/lib/postgresql` (18 moved the data path).
+- **Master password:** set it in `config/odoo.conf` (`admin_passwd`) before exposing Odoo outside your machine.
+- **Two projects at once:** clone the repo into another folder and, in its `compose.yaml`, change the `container_name`s and the port (for example `8070:8069`).
 
-## ¿Odoo en producción?
+## ⚠️ Security recommendations
 
-Esta plantilla es para desarrollar y probar. Si quieres desplegar Odoo para tu negocio con proxy, SSL y copias de seguridad, o no tienes claro si te conviene Enterprise o Community, Odoo.sh o tu propio servidor, agenda una llamada gratis de 5 minutos: [agenda](https://odooerpcloud.com/appointment)
+The defaults (`http_interface = 0.0.0.0`, port `8069` open) are meant for local and development use. If you publish Odoo on the internet:
 
-Videos relacionados:
+- **Going to publish it on the internet?** You'll want HTTPS and a hardened setup. Here's a [video](https://youtu.be/k_EFDQkpAi8?t=110) showing how it works in under 3 minutes.
+- **Change the PostgreSQL password** in `compose.yaml` (`PASSWORD` and `POSTGRES_PASSWORD`, same value in both). The default one is public, since it's in the repo.
+- **Set `admin_passwd`** in `config/odoo.conf`.
 
-- **Odoo en producción:** cómo lo desplegamos, [video en YouTube](https://youtu.be/k_EFDQkpAi8)
-- **Novedades de Odoo 20:** [video en YouTube](https://youtu.be/jeq7t1qoBRw)
-- **Odoo 20 para desarrollo sin Docker** (Ubuntu 26.04, con Paper Muncher): [video en YouTube](https://youtu.be/_qqtEde-_5M)
+## Odoo in production?
 
-## Licencia
+This template is for development and testing. To run Odoo for your business, there are two ways:
 
-MIT. Odoo es de Odoo S.A.; esta plantilla solo parte de su imagen oficial de Docker.
+- **Do it yourself, with commands:** production Odoo in 3 minutes. [Watch the video](https://youtu.be/k_EFDQkpAi8).
+- **No commands, with our app:** a complete app that installs Odoo in production with HTTPS and hardens the server against bots, a constant threat today. [See how it works](https://youtu.be/k_EFDQkpAi8?t=110).
+
+Our app is for you if:
+
+- You want Odoo for your business.
+- You want to publish Odoo securely.
+- You need an installer for multiple instances, all with automatic HTTPS.
+- You don't have time for the installation, or you don't have technical knowledge.
+
+Support and updates are included at no extra cost.
+
+Not sure whether Enterprise or Community, or Odoo.sh or your own VPS, suits you? Book a free 5-minute call and we'll help you decide: [book here](https://odooerpcloud.com/appointment)
+
+Related videos (in Spanish):
+
+- **Odoo in production:** how we deploy it, [YouTube video](https://youtu.be/k_EFDQkpAi8)
+- **What's new in Odoo 20:** [YouTube video](https://youtu.be/jeq7t1qoBRw)
+- **Odoo 20 for development without Docker** (Ubuntu 26.04, with Paper Muncher): [YouTube video](https://youtu.be/_qqtEde-_5M)
+
+## License
+
+MIT. Odoo belongs to Odoo S.A.; this template only builds on its official Docker image.
