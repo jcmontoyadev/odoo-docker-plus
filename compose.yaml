@@ -20,7 +20,7 @@ services:
     environment:
       HOST: db
       USER: odoo
-      PASSWORD: $Chesco510W4821XV4Uj57tSSV8z0wn
+      PASSWORD: Chesco510W4821XV4Uj57tSSV8z0wn
 
   db:
     # Odoo 20 requires PostgreSQL 16 or later.
@@ -28,7 +28,7 @@ services:
     container_name: pg17
     environment:
       POSTGRES_USER: odoo
-      POSTGRES_PASSWORD: $Chesco510W4821XV4Uj57tSSV8z0wn
+      POSTGRES_PASSWORD: Chesco510W4821XV4Uj57tSSV8z0wn
       POSTGRES_DB: postgres
     volumes:
       - db_data:/var/lib/postgresql/data

@@ -4,7 +4,18 @@
 
 > **Coming from the old Odoo 19 Docker video?** Use this project instead of the PDF guide from that video: it's more up to date and fixes the errors that guide had.
 
-Odoo 20 on Docker, built on the official image, with four fixes: it opens in the browser (the official `odoo:20` only listens on 127.0.0.1), it runs the latest nightly build instead of a weeks-old one, it ships Paper Muncher (Odoo 20's new PDF engine), and you add your own Python or system dependencies in one line. `git clone`, `docker compose up -d --build`, done.
+**A complete, ready-configured project to deploy Odoo 20 in under 5 minutes. No coding: one command.**
+
+Built on the official Odoo image: safe and open source.
+
+- ✅ Odoo 20 Community by default, no restrictions
+- ✅ Enterprise (requires a license or token)
+- ✅ Your own modules folder: custom, third-party, purchased or AI-built
+- ✅ Opens in the browser out of the box, with `odoo.conf` already set up
+- ✅ Always up to date: the latest nightly, or the date you choose
+- ✅ Paper Muncher, Odoo 20's new PDF engine
+- ✅ Linux philosophy: it does what it promises, with no extra features making it heavy to maintain
+- ✅ Up-to-date docs in English and Spanish
 
 Made for development and testing; also a solid base for something more serious.
 
@@ -12,7 +23,8 @@ Made for development and testing; also a solid base for something more serious.
 
 | | Official `odoo:20` | odoo-docker-plus |
 | --- | --- | --- |
-| Opening `localhost:8069` | ❌ No response: Odoo 20 only listens on `127.0.0.1` | ✅ Fixed in `config/odoo.conf` |
+| Configuration (`odoo.conf`) | ❌ Odoo 20 only listens on `127.0.0.1`: `localhost:8069` doesn't respond until you write your own config | ✅ Ready-made `config/odoo.conf`: opens in the browser out of the box, and every Odoo setting is one edit away |
+| Your modules (`custom_addons`) | You create the folder, mount it and check `addons_path` | ✅ Drop your own, third-party or purchased modules into `custom_addons/` and Odoo picks them up |
 | Odoo build | The one in the image (published days or weeks late) | The latest nightly, or the date you choose |
 | Paper Muncher (Odoo 20's new PDF engine) | ❌ Not included | ✅ Installed (amd64 servers) |
 | Extra dependencies | You write your own Dockerfile | One line in `requirements.txt` or `APT_PACKAGES` |
@@ -39,17 +51,15 @@ docker compose version
 git --version
 ```
 
-## Quick start
+## Deploy Odoo with one command
 
 ```bash
-git clone https://github.com/jcmontoyadev/odoo-docker-plus.git
-cd odoo-docker-plus
-docker compose up -d --build
+git clone https://github.com/jcmontoyadev/odoo-docker-plus.git && cd odoo-docker-plus && docker compose up -d --build
 ```
 
 Open http://localhost:8069 and create your database.
 
-## What's in the repo
+## What's in this project (repo)
 
 | File | Purpose |
 | --- | --- |
@@ -138,7 +148,7 @@ To use it:
 
 The defaults (`http_interface = 0.0.0.0`, port `8069` open) are meant for local and development use. If you publish Odoo on the internet:
 
-- **Going to publish it on the internet?** You'll want HTTPS and a hardened setup. Here's a [video](https://youtu.be/k_EFDQkpAi8?t=110) showing how it works in under 3 minutes.
+- **Going to publish it on the internet?** You'll want HTTPS and a hardened setup. Here's a [video](https://youtu.be/k_EFDQkpAi8?t=126) showing how it works in under 3 minutes.
 - **Change the PostgreSQL password** in `compose.yaml` (`PASSWORD` and `POSTGRES_PASSWORD`, same value in both). The default one is public, since it's in the repo.
 - **Set `admin_passwd`** in `config/odoo.conf`.
 
@@ -147,7 +157,7 @@ The defaults (`http_interface = 0.0.0.0`, port `8069` open) are meant for local 
 This template is for development and testing. To run Odoo for your business, there are two ways:
 
 - **Do it yourself, with commands:** production Odoo in 3 minutes. [Watch the video](https://youtu.be/k_EFDQkpAi8).
-- **No commands, with our app:** a complete app that installs Odoo in production with HTTPS and hardens the server against bots, a constant threat today. [See how it works](https://youtu.be/k_EFDQkpAi8?t=110).
+- **No commands, with our app:** a complete app that installs Odoo in production with HTTPS and hardens the server against bots, a constant threat today. [See how it works](https://youtu.be/k_EFDQkpAi8?t=126).
 
 Our app is for you if:
 

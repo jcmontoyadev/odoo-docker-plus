@@ -4,13 +4,25 @@
 
 > **¿Vienes del video antiguo de Odoo 19 con Docker?** Usa este proyecto en lugar del PDF de ese video: está más actualizado y corrige los errores que daba aquella guía.
 
-Odoo 20 en Docker a partir de la imagen oficial, con lo que a la oficial le falta. Para desarrollar y probar; también te sirve de base para algo más serio.
+**Proyecto completo y configurado para desplegar Odoo 20 en menos de 5 minutos. Sin tocar código: un solo comando.**
+
+Basado en la imagen oficial de Odoo: seguro y open source.
+
+- ✅ Odoo 20 Community por defecto, sin restricciones
+- ✅ Enterprise (requiere licencia o token)
+- ✅ Tu carpeta de módulos: propios, de terceros, comprados o hechos con IA
+- ✅ Se abre en el navegador a la primera, con `odoo.conf` ya configurado
+- ✅ Odoo siempre actualizado: la última nightly, o la fecha que elijas
+- ✅ Paper Muncher, el nuevo motor de PDF de Odoo 20
+- ✅ Filosofía Linux: hace lo que promete, sin funciones de más que lo hagan pesado de mantener
+- ✅ Documentación al día en español e inglés
 
 ## Qué mejora sobre la imagen oficial
 
 | | `odoo:20` oficial | odoo-docker-plus |
 | --- | --- | --- |
-| Abrir `localhost:8069` | ❌ No responde: Odoo 20 solo escucha en `127.0.0.1` | ✅ Corregido en `config/odoo.conf` |
+| Configuración (`odoo.conf`) | ❌ Odoo 20 solo escucha en `127.0.0.1`: `localhost:8069` no responde hasta que escribes tu propia configuración | ✅ `config/odoo.conf` listo: se abre en el navegador de serie y cualquier ajuste de Odoo se cambia editando un fichero |
+| Tus módulos (`custom_addons`) | Creas la carpeta, la montas y compruebas el `addons_path` | ✅ Suelta en `custom_addons/` módulos propios, de terceros o comprados y Odoo los carga |
 | Compilación de Odoo | La de la imagen (se publica con días o semanas de retraso) | La última nightly, o la fecha que elijas |
 | Paper Muncher (nuevo motor de PDF de Odoo 20) | ❌ No viene | ✅ Instalado (servidores amd64) |
 | Dependencias extra | Te toca escribir tu propio Dockerfile | Una línea en `requirements.txt` o en `APT_PACKAGES` |
@@ -37,17 +49,15 @@ docker compose version
 git --version
 ```
 
-## Arranque en 3 pasos
+## Despliega Odoo con un solo comando
 
 ```bash
-git clone https://github.com/jcmontoyadev/odoo-docker-plus.git
-cd odoo-docker-plus
-docker compose up -d --build
+git clone https://github.com/jcmontoyadev/odoo-docker-plus.git && cd odoo-docker-plus && docker compose up -d --build
 ```
 
 Abre http://localhost:8069 y crea tu base de datos.
 
-## Qué hay en el repo
+## Qué hay en este proyecto (repo)
 
 | Fichero | Para qué |
 | --- | --- |
@@ -57,7 +67,7 @@ Abre http://localhost:8069 y crea tu base de datos.
 | `config/odoo.conf` | La configuración de Odoo (se monta en `/etc/odoo`) |
 | `custom_addons/` | Tus módulos |
 
-## Odoo siempre al día
+## Odoo siempre actualizado
 
 La imagen oficial no se publica cada día: cuando la descargas puede llevar semanas de correcciones atrasadas. En `compose.yaml`:
 
@@ -136,7 +146,7 @@ Para usarlo:
 
 Los valores por defecto (`http_interface = 0.0.0.0`, puerto `8069` abierto) son para uso local y desarrollo. Si publicas Odoo en internet:
 
-- **¿Vas a publicarlo en internet?** Querrás HTTPS y una configuración blindada. Te dejo este [video](https://youtu.be/k_EFDQkpAi8?t=110) para que veas cómo funciona en menos de 3 minutos.
+- **¿Vas a publicarlo en internet?** Querrás HTTPS y una configuración blindada. Te dejo este [video](https://youtu.be/k_EFDQkpAi8?t=126) para que veas cómo funciona en menos de 3 minutos.
 - **Cambia la contraseña de PostgreSQL** en `compose.yaml` (`PASSWORD` y `POSTGRES_PASSWORD`, el mismo valor en ambas). La de por defecto es pública, porque está en el repo.
 - **Pon `admin_passwd`** en `config/odoo.conf`.
 
@@ -145,7 +155,7 @@ Los valores por defecto (`http_interface = 0.0.0.0`, puerto `8069` abierto) son 
 Esta plantilla es para desarrollar y probar. Para tener Odoo en tu negocio, hay dos caminos:
 
 - **Por tu cuenta, con comandos:** Odoo en producción en 3 minutos. [Mira el video](https://youtu.be/k_EFDQkpAi8).
-- **Sin comandos, con nuestra app:** una app completa que instala Odoo en producción con HTTPS y blinda el servidor contra los ataques de bots, algo habitual hoy en día. [Mira cómo funciona](https://youtu.be/k_EFDQkpAi8?t=110).
+- **Sin comandos, con nuestra app:** una app completa que instala Odoo en producción con HTTPS y blinda el servidor contra los ataques de bots, algo habitual hoy en día. [Mira cómo funciona](https://youtu.be/k_EFDQkpAi8?t=126).
 
 Nuestra app es para ti si:
 
